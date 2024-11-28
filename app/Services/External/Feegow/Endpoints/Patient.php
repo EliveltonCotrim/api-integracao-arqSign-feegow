@@ -3,6 +3,7 @@
 namespace App\Services\External\Feegow\Endpoints;
 
 use App\Services\External\Feegow\Entities\Patient as PatientEntity;
+use App\Services\External\Feegow\Entities\UploadFileData;
 
 class Patient extends BaseEndpoint
 {
@@ -15,15 +16,14 @@ class Patient extends BaseEndpoint
         return $jsonPatient['success'] ? $this->transform($jsonPatient['content'], PatientEntity::class) : null;
     }
 
-    public function uploadFile(array $data)
+    /**
+     * Summary of uploadFile
+     * @param array $data
+     * @return array
+     */
+    public function uploadFile(array $data): array
     {
-        $response = $this->feegowServiceApi->api->post('/patient/upload-base64', [
-            'paciente_id' => $data['paciente_id'],
-            'cpf' => $data['cpf'],
-            'nascimento' => $data['nascimento'],
-            'base64_file' => $data['base64_file'],
-            'arquivo_descricao' => $data['arquivo_descricao'],
-        ]);
+        $response = $this->feegowServiceApi->api->post('/patient/upload-base64', [...$data]);
 
         return $response->json();
     }

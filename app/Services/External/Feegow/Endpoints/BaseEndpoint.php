@@ -14,7 +14,7 @@ class BaseEndpoint
         $this->feegowServiceApi = new FeegowServiceApi();
     }
 
-    protected function transform(mixed $json, string $entity)
+    protected function transform(mixed $json, string $entity): object
     {
         return new $entity($json);
     }

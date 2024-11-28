@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ArqSignWebhookException;
 use App\Http\Requests\ArqSignWebhookRequest;
-use App\Services\ArqSignService;
+use App\Services\IntegracaoArqSignFeegowService;
 use Illuminate\Http\JsonResponse;
 
-class ArqSignWebhookController extends Controller
+class IntegracaoArqSignFeegowController extends Controller
 {
-    private ArqSignService $feegowService;
+    private IntegracaoArqSignFeegowService $feegowService;
 
     public function __construct(){
-        $this->feegowService = new ArqSignService();
+        $this->feegowService = new IntegracaoArqSignFeegowService();
     }
 
     /**

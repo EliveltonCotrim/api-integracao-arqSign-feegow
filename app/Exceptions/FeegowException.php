@@ -7,8 +7,7 @@ use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
-
-class ArqSignWebhookException extends Exception
+class FeegowException extends Exception
 {
     protected $message = "Erro ao processar webhook da ArqSign";
     protected $code = Response::HTTP_BAD_REQUEST;

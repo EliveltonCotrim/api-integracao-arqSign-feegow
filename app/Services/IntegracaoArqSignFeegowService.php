@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
-use App\Exceptions\ArqSignWebhookException;
+use App\Exceptions\FeegowException;
 use App\Services\External\Arqsign\Entities\WebhookNotification as EntitieWebhookNotification;
 use App\Services\External\Feegow\Facades\FeegowApi;
 
-class ArqSignService
+class IntegracaoArqSignFeegowService
 {
     public function dataProcessing(array $data)
     {
@@ -22,7 +22,7 @@ class ArqSignService
         // Validar se encontrou todos sinatarios, se não encontrou, retornar erro
         throw_if(
             in_array(null, $patients, true),
-            ArqSignWebhookException::class,
+            FeegowException::class,
             'Paciente não encontrado.'
         );
 
@@ -45,7 +45,7 @@ class ArqSignService
 
                 throw_if(
                     (isset($response['success']) && !$response['success']) || isset($response['base64_file']),
-                    ArqSignWebhookException::class,
+                    FeegowException::class,
                     $errorMessage,
                 );
 
