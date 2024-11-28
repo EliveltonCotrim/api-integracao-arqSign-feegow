@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Services\External\Feegow\FeegowService;
+use App\Services\External\Feegow\Facades\FeegowApi;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -10,22 +10,12 @@ class UploadFile implements ShouldQueue
 {
     use Queueable;
 
-    protected FeegowService $feegowService;
-
-    /**
-     * Create a new job instance.
-     */
-    public function __construct(private array $data)
-    {
-        $this->feegowService = new FeegowService();
-    }
-
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        $this->feegowService->patient()->uploadFile($this->data);
+        FeegowApi::patient()->uploadFile($this->data);
 
         logger()->info("File uploaded to Feegow", $this->data['cpf']);
     }

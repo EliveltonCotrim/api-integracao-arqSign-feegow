@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\ArqSignWebhookException;
 use App\Services\External\Arqsign\Entities\WebhookNotification as EntitieWebhookNotification;
-use App\Services\External\Feegow\Facades\FeegowService;
+use App\Services\External\Feegow\Facades\FeegowApi;
 
 class ArqSignService
 {
@@ -16,7 +16,7 @@ class ArqSignService
         foreach ($data->signatarios as $key => $signatario) {
             $patient_cpf = $signatario->dadosAssinatura?->dadosPessoaFisica?->numeroDocumentoPessoaFisica ?? null;
 
-            $patients[$key] = FeegowService::patient()->searchPatient($patient_cpf);
+            $patients[$key] = FeegowApi::patient()->searchPatient($patient_cpf);
         }
 
         // Validar se encontrou todos sinatarios, se não encontrou, retornar erro
@@ -34,19 +34,45 @@ class ArqSignService
             ];
 
             foreach ($data->documentos as $key => $documento) {
-                $dataUploadFeegow['base64_file'] = $documento->base64Documento;
-                $dataUploadFeegow['arquivo_descricao'] = $documento->nomeDocumento;
 
-                $response = FeegowService::patient()->uploadFile($dataUploadFeegow);
+                $dataUploadFeegow['base64_file'] = $documento->base64Documento ?? null;
+                $dataUploadFeegow['arquivo_descricao'] = $documento->nomeDocumento ?? null;
+
+                $response = FeegowApi::patient()->uploadFile($dataUploadFeegow);
                 // Verificar à necessidade de implementar fila.
 
-                if (isset($response['success']) && !$response['success']) {
-                    logger()->error('Erro ao tentar fazer o upload do arquivo.', ['paciente_id' => $dataUploadFeegow['paciente_id'], 'cpf' => $dataUploadFeegow['cpf']]);
-                } else {
-                    logger()->info('Upload do arquivo concluído com sucesso.', ['paciente_id' => $dataUploadFeegow['paciente_id'], 'cpf' => $dataUploadFeegow['cpf']]);
-                }
+                $errorMessage = $this->getMessages($response, $dataUploadFeegow);
+
+                throw_if(
+                    (isset($response['success']) && !$response['success']) || isset($response['base64_file']),
+                    ArqSignWebhookException::class,
+                    $errorMessage,
+                );
+
+                logger()->channel('single')->info('Upload do arquivo concluído com sucesso.', ['paciente_id' => $dataUploadFeegow['paciente_id']]);
+
             }
         }
+    }
 
+    public function getMessages(array $response, array $dataUploadFeegow): string
+    {
+        $messages = [];
+        $errorMessage = 'Erro ao tentar fazer o upload do arquivo para o paciente: ' . $dataUploadFeegow['paciente_id'];
+
+        if (!isset($response['success'])) {
+
+            foreach ($response as $field => $errors) {
+                if (is_array($errors)) {
+                    foreach ($errors as $error) {
+                        $messages[] = "{$field}: {$error}";
+                    }
+                }
+            }
+
+            $errorMessage = !empty($messages) ? implode('; ', $messages) : $errorMessage;
+        }
+
+        return $errorMessage;
     }
 }

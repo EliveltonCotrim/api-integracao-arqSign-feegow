@@ -2,16 +2,16 @@
 
 namespace App\Services\External\Feegow\Endpoints;
 
-use App\Services\External\Feegow\FeegowService;
+use App\Services\External\Feegow\FeegowServiceApi;
 
 
 class BaseEndpoint
 {
-    protected FeegowService $service;
+    protected FeegowServiceApi $feegowServiceApi;
 
     public function __construct()
     {
-        $this->service = new FeegowService();
+        $this->feegowServiceApi = new FeegowServiceApi();
     }
 
     protected function transform(mixed $json, string $entity)

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
  * Feegow Rapid Api Service
  * Doc: https://docs.feegow.com/
  */
-class FeegowService {
+class FeegowServiceApi {
 
     use SearchPatient;
 

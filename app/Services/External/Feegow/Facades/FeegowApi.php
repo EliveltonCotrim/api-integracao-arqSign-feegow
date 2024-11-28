@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static Patient Patient()
  */
-class FeegowService extends Facade
+class FeegowApi extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \App\Services\External\Feegow\FeegowService::class;
+        return \App\Services\External\Feegow\FeegowServiceApi::class;
     }
 }
