@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\ArqSignWebhookException;
+use App\Exceptions\FeegowException;
 use App\Http\Requests\ArqSignWebhookRequest;
 use App\Services\IntegracaoArqSignFeegowService;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +27,7 @@ class IntegracaoArqSignFeegowController extends Controller
 
             return response()->json(status: JsonResponse::HTTP_OK);
 
-        } catch (ArqSignWebhookException $e) {
+        } catch (FeegowException $e) {
             throw $e;
 
         } catch (\Throwable $th) {

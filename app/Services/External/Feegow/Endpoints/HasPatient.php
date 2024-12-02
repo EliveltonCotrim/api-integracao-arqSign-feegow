@@ -2,7 +2,7 @@
 
 namespace App\Services\External\Feegow\Endpoints;
 
-trait SearchPatient {
+trait HasPatient {
     public function patient()
     {
         return new Patient();

@@ -7,11 +7,18 @@ use App\Services\External\Feegow\Entities\UploadFileData;
 
 class Patient extends BaseEndpoint
 {
+    /**
+     * Summary of searchPatient
+     * @param string $patient_cpf
+     * @return \App\Services\External\Feegow\Entities\Patient|null
+     */
     public function searchPatient(string $patient_cpf): PatientEntity|null
     {
         $jsonPatient = $this->feegowServiceApi->api->withQueryParameters(['paciente_cpf' => $patient_cpf])
             ->get('/patient/search/')
             ->json();
+
+            // dd($jsonPatient);
 
         return $jsonPatient['success'] ? $this->transform($jsonPatient['content'], PatientEntity::class) : null;
     }

@@ -2,7 +2,7 @@
 
 namespace App\Services\External\Feegow;
 
-use App\Services\External\Feegow\Endpoints\SearchPatient;
+use App\Services\External\Feegow\Endpoints\HasPatient;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Http;
  */
 class FeegowServiceApi {
 
-    use SearchPatient;
+    use HasPatient;
 
     public PendingRequest $api;
 
