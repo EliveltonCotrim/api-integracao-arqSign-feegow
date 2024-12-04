@@ -36,7 +36,7 @@ class IntegracaoArqSignFeegowController extends Controller
 
         } catch (\Throwable $th) {
 
-            Log::error($e->getMessage());
+            Log::error($th->getMessage());
 
             throw $th;
         }

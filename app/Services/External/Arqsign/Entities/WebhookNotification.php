@@ -14,6 +14,7 @@ class WebhookNotification
     public ?string $idResponsavel;
     public ?string $nomeResponsavel;
     public ?string $status;
+    public string $dataHoraAtual;
     public ?string $dataCadastro;
     public ?string $dataEnvio;
     public ?string $dataConclusao;
@@ -35,6 +36,7 @@ class WebhookNotification
         $this->idResponsavel = data_get($data, 'IdResponsavel');
         $this->nomeResponsavel = data_get($data, 'NomeResponsavel');
         $this->status = data_get($data, 'Status');
+        $this->dataHoraAtual = data_get($data, 'DataHoraAtual');
         $this->dataCadastro = data_get($data, 'DataCadastro');
         $this->dataEnvio = data_get($data, 'DataEnvio');
         $this->dataConclusao = data_get($data, 'DataConclusao');

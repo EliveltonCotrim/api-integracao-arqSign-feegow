@@ -33,6 +33,7 @@ class ArqSignWebhookRequest extends FormRequest
             "NomeResponsavel" => ['nullable', 'string'],
             "Status" => ['nullable', 'string'],
             "DataCadastro" => ['nullable', 'date'],
+            "DataHoraAtual" => ['nullable', 'date'],
             "DataEnvio" => ['nullable', 'date'],
             "DataConclusao" => ['nullable', 'date'],
             "DataReenvio" => ['nullable', 'date'],
