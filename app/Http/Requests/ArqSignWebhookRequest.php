@@ -75,11 +75,19 @@ class ArqSignWebhookRequest extends FormRequest
             "Documentos.*.Id" => ['uuid'],
             "Documentos.*.OrdemDocumento" => ['integer'],
             "Documentos.*.NomeDocumento" => ['string'],
-            "Documentos.*.Base64Documento" => ['string'],
+            "Documentos.*.Base64Documento" => ['required','string'],
             "Documentos.*.LinkDocumentosCompartilhados" => ['nullable', 'url'],
             "Documentos.*.RegistroAssinaturas.*.NomeRegistro" => ['string'],
             "Documentos.*.RegistroAssinaturas.*.Base64Registro" => ['string'],
 
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge(json_decode($this->getContent(), true));
     }
 }
