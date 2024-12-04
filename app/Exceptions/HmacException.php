@@ -3,27 +3,24 @@
 namespace App\Exceptions;
 
 use Exception;
-
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
-class FeegowException extends Exception
+
+class HmacException extends Exception
 {
-    protected $message = "Erro ao processar webhook da ArqSign";
-    protected $code = Response::HTTP_INTERNAL_SERVER_ERROR;
+    protected $message = "Tentativa de acesso com HMAC inválido.";
+    protected $code = Response::HTTP_FORBIDDEN;
 
     public function report()
     {
-        Log::critical($this);
+        Log::warning($this);
     }
 
     public function render()
     {
         return response()->json(
-            [
-                "message" => $this->message,
-
-            ],
+            ["message" => $this->message],
             $this->code
         );
     }

@@ -6,6 +6,7 @@ use App\Exceptions\FeegowException;
 use App\Http\Requests\ArqSignWebhookRequest;
 use App\Services\IntegracaoArqSignFeegowService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class IntegracaoArqSignFeegowController extends Controller
 {
@@ -28,9 +29,15 @@ class IntegracaoArqSignFeegowController extends Controller
             return response()->json(status: JsonResponse::HTTP_OK);
 
         } catch (FeegowException $e) {
+
+            Log::error($e->getMessage());
+
             throw $e;
 
         } catch (\Throwable $th) {
+
+            Log::error($e->getMessage());
+
             throw $th;
         }
     }

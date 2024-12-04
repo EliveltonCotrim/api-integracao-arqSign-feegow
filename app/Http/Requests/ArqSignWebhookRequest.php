@@ -75,7 +75,7 @@ class ArqSignWebhookRequest extends FormRequest
             "Documentos.*.Id" => ['uuid'],
             "Documentos.*.OrdemDocumento" => ['integer'],
             "Documentos.*.NomeDocumento" => ['string'],
-            "Documentos.*.Base64Documento" => ['required','string'],
+            "Documentos.*.Base64Documento" => ['required', 'string'],
             "Documentos.*.LinkDocumentosCompartilhados" => ['nullable', 'url'],
             "Documentos.*.RegistroAssinaturas.*.NomeRegistro" => ['string'],
             "Documentos.*.RegistroAssinaturas.*.Base64Registro" => ['string'],
