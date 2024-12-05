@@ -23,15 +23,12 @@ class UploadFilesHistory extends Model
         'arqSign_status',
         'arqSign_dataConclusao',
         'statusProcesso',
+        'signatarios',
+        'documentos'
     ];
 
-    public function documentos(): HasMany
-    {
-        return $this->hasMany(Documento::class);
-    }
-
-    public function signatarios(): HasMany
-    {
-        return $this->hasMany(Signatario::class);
-    }
+    protected $casts = [
+        'signatarios'=> 'array',
+        'documentos'=> 'array'
+    ];
 }

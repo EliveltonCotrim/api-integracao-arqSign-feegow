@@ -30,6 +30,8 @@ class IntegracaoArqSignFeegowService
 
         $dataProcess = new ProcessWebhook($data);
         $processo = UploadFilesHistory::create($dataProcess->toArray());
+        $processo->signatarios = $data->signatarios ?? null;
+        $processo->save();
 
         foreach ($patients as $keyPatient => $patient) {
             $dataUploadFeegow = [
@@ -37,24 +39,6 @@ class IntegracaoArqSignFeegowService
                 'cpf' => $patient->cpf, // verificar se é pessoa fisica (DadosPessoaFisica) ou juridica (DadosPessoaJuridica)
                 'nascimento' => $patient->nascimento,
             ];
-
-            $processo->signatarios()->create([
-                'feegow_id_paciente' => $dataUploadFeegow['paciente_id'],
-                'feegow_nascimento' => now()->parse($dataUploadFeegow['nascimento']),
-                'feegow_cpf' => $dataUploadFeegow['cpf'],
-                'ordemAssinatura' => $data?->signatarios[$keyPatient]?->ordemAssinatura,
-                'idSignatario' => $data?->signatarios[$keyPatient]?->id,
-                'nome' => $data?->signatarios[$keyPatient]?->nome,
-                'email' => $data?->signatarios[$keyPatient]?->email ?? null,
-                'telefone' => $data?->signatarios[$keyPatient]?->telefone ?? null,
-                'pessoaFisica' => $data?->signatarios[$keyPatient]?->dadosAssinatura?->dadosPessoaFisica->tipoDocumentoPessoaFisica ? true : false,
-                'tipoAssinatura' => $data?->signatarios[$keyPatient]?->dadosAssinatura?->tipoAssinatura,
-                'dataAssinatura' => $data?->signatarios[$keyPatient]?->dadosAssinatura?->dataAssinatura,
-                'geoLocalizacao' => $data?->signatarios[$keyPatient]?->dadosAssinatura?->geoLocalizacao ?? null,
-                'ip' => $data?->signatarios[$keyPatient]?->dadosAssinatura?->ip ?? null,
-                'tipoDocumentoPessoaFisica' => $data?->signatarios[$keyPatient]?->dadosAssinatura?->dadosPessoaFisica->tipoDocumentoPessoaFisica ?? null,
-                'numeroDocumetoPessoaFisica' => $data?->signatarios[$keyPatient]?->dadosAssinatura?->dadosPessoaFisica->numeroDocumentoPessoaFisica ?? null,
-            ]);
 
             foreach ($data->documentos as $keyDoc => $documento) {
 
@@ -66,14 +50,6 @@ class IntegracaoArqSignFeegowService
 
                 $errorMessage = $this->getMessages($response, $dataUploadFeegow);
 
-                // if(!$processo->documentos->where('id_documento')->first()->id_documento == $data?->documentos[$keyDoc]?->id) {
-                    $processo->documentos()->create([
-                        'id_documento' => $data?->documentos[$keyDoc]?->id,
-                        'ordemDocumento' => $data?->documentos[$keyDoc]?->ordemDocumento,
-                        'nomeDocumento' => $data?->documentos[$keyDoc]?->nomeDocumento,
-                    ]);
-                // }
-
                 throw_if(
                     (isset($response['success']) && !$response['success']) || isset($response['base64_file']),
                     FeegowException::class,
@@ -83,6 +59,11 @@ class IntegracaoArqSignFeegowService
                 logger()->channel('single')->info('Upload do arquivo concluído com sucesso.', ['paciente_id' => $dataUploadFeegow['paciente_id']]);
             }
         }
+
+        $processo->documentos = array_map(function ($documento) {
+            unset($documento->base64Documento);
+            return $documento;
+        }, $data->documentos) ?? null;
 
         $processo->statusProcesso = "Concluído";
         $processo->save();

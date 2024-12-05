@@ -23,6 +23,8 @@ return new class extends Migration
             $table->uuid('arqSign_idResponsavel');
             $table->string('arqSign_NomeResponsavel');
             $table->string('arqSign_status');
+            $table->json('signatarios')->nullable();
+            $table->json('documentos')->nullable();
             $table->dateTime('arqSign_dataConclusao');
             $table->string('statusProcesso')->nullable();
 
