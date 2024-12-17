@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('arqSign_idProcesso');
             $table->uuid('arqSign_idConta');
             $table->uuid('arqSign_idWebhook');
-            $table->timestamp('arqSign_dataHoraAtualProcesso');
+            $table->dateTime('arqSign_dataHoraAtualProcesso');
             $table->string('arqSign_nomeProcesso');
             $table->uuid('arqSign_idPasta');
             $table->string('arqSign_caminhoDaPasta');

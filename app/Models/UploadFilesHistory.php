@@ -31,4 +31,9 @@ class UploadFilesHistory extends Model
         'signatarios'=> 'array',
         'documentos'=> 'array'
     ];
+
+    public function feegowUploadProcess(): HasMany
+    {
+        return $this->hasMany(FeegowUploadProcess::class);
+    }
 }

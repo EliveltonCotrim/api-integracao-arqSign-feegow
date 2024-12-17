@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\FeegowException;
+use App\Jobs\UploadFile;
 use App\Models\UploadFilesHistory;
 use App\Services\External\Arqsign\Entities\ProcessWebhook;
 use App\Services\External\Arqsign\Entities\WebhookNotification as EntitieWebhookNotification;
@@ -21,7 +22,7 @@ class IntegracaoArqSignFeegowService
             $patients[$key] = FeegowApi::patient()->searchPatient($patient_cpf);
         }
 
-        // Validar se encontrou todos sinatarios, se não encontrou, retornar erro
+        // Verificar se encontrou o paciente
         throw_if(
             in_array(null, $patients, true),
             FeegowException::class,
@@ -45,18 +46,10 @@ class IntegracaoArqSignFeegowService
                 $dataUploadFeegow['base64_file'] = $documento->base64Documento ?? null;
                 $dataUploadFeegow['arquivo_descricao'] = $documento->nomeDocumento ?? null;
 
-                $response = FeegowApi::patient()->uploadFile($dataUploadFeegow);
-                // Verificar à necessidade de implementar fila.
+                logger()->info('dataUploadFeegow', ['dataUploadFeegow' => $dataUploadFeegow]);
 
-                $errorMessage = $this->getMessages($response, $dataUploadFeegow);
-
-                throw_if(
-                    (isset($response['success']) && !$response['success']) || isset($response['base64_file']),
-                    FeegowException::class,
-                    $errorMessage,
-                );
-
-                logger()->channel('single')->info('Upload do arquivo concluído com sucesso.', ['paciente_id' => $dataUploadFeegow['paciente_id']]);
+                // Fila para processar o upload do arquivo
+                UploadFile::dispatch($dataUploadFeegow, $processo);
             }
         }
 
@@ -67,26 +60,5 @@ class IntegracaoArqSignFeegowService
 
         $processo->statusProcesso = "Concluído";
         $processo->save();
-    }
-
-    public function getMessages(array $response, array $dataUploadFeegow): string
-    {
-        $messages = [];
-        $errorMessage = 'Erro ao tentar fazer o upload do arquivo para o paciente: ' . $dataUploadFeegow['paciente_id'];
-
-        if (!isset($response['success'])) {
-
-            foreach ($response as $field => $errors) {
-                if (is_array($errors)) {
-                    foreach ($errors as $error) {
-                        $messages[] = "{$field}: {$error}";
-                    }
-                }
-            }
-
-            $errorMessage = !empty($messages) ? implode('; ', $messages) : $errorMessage;
-        }
-
-        return $errorMessage;
     }
 }

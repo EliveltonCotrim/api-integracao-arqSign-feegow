@@ -18,7 +18,7 @@ class HmacAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Hmac wehbook
+        //Hmac wehbook
         $secret = trim(config('arqsign.keys.hmac_webhook'));
         $payload = $request->getContent();
 

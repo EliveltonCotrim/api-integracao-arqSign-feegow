@@ -10,14 +10,14 @@ class ProcessWebhook
     public $arqSign_idProcesso;
     public $arqSign_idConta;
     public $arqSign_idWebhook;
-    public string $arqSign_dataHoraAtualProcesso;
+    public \DateTime $arqSign_dataHoraAtualProcesso;
     public string $arqSign_nomeProcesso;
     public $arqSign_idPasta;
     public $arqSign_caminhoDaPasta;
     public $arqSign_idResponsavel;
     public string $arqSign_NomeResponsavel;
     public string $arqSign_status;
-    public string $arqSign_dataConclusao;
+    public \DateTime $arqSign_dataConclusao;
 
     public string $statusProcesso;
 
@@ -27,7 +27,7 @@ class ProcessWebhook
         $this->arqSign_idConta = data_get($data, 'idConta');
         $this->arqSign_idWebhook = data_get($data, 'idWebhook');
 
-        $this->arqSign_dataHoraAtualProcesso = data_get($data, 'dataHoraAtual');
+        $this->arqSign_dataHoraAtualProcesso = new DateTime(data_get($data, 'dataHoraAtualProcesso'));
 
         $this->arqSign_nomeProcesso = data_get($data, 'nomeProcesso');
 
@@ -39,7 +39,7 @@ class ProcessWebhook
         $this->arqSign_status = data_get($data, 'status');
         $this->statusProcesso = "Em processo";
 
-        $this->arqSign_dataConclusao =  data_get($data, 'dataConclusao');
+        $this->arqSign_dataConclusao =  new DateTime(data_get($data, 'dataConclusao'));
 
     }
 
