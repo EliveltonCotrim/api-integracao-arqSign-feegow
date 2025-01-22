@@ -12,6 +12,7 @@ class ArqSignWebhookRequest extends FormRequest
     public function authorize(): bool
     {
         return $this->IdConta == config('arqsign.keys.id_conta') && $this->IdWebhook == config('arqsign.keys.id_webhook');
+        // return true;
     }
 
     /**
@@ -32,13 +33,8 @@ class ArqSignWebhookRequest extends FormRequest
             "IdResponsavel" => ['nullable', 'uuid'],
             "NomeResponsavel" => ['nullable', 'string'],
             "Status" => ['nullable', 'string'],
-            "DataCadastro" => ['nullable', 'date'],
             "DataHoraAtual" => ['nullable', 'date'],
-            "DataEnvio" => ['nullable', 'date'],
             "DataConclusao" => ['nullable', 'date'],
-            "DataReenvio" => ['nullable', 'date'],
-            "DataExpiracao" => ['nullable', 'date'],
-            "ExpiracaoDias" => ['nullable', 'integer'],
             "Signatarios" => ['required', 'array'],
             "Documentos" => ['required', 'array'],
 
@@ -64,7 +60,7 @@ class ArqSignWebhookRequest extends FormRequest
             "Signatarios.*.DadosAssinatura.DadosCertificado.ValidadeFim" => ['nullable', 'date'],
             "Signatarios.*.DadosAssinatura.DadosPessoaFisica.NomePessoaFisica" => ['nullable', 'string'],
             "Signatarios.*.DadosAssinatura.DadosPessoaFisica.TipoDocumentoPessoaFisica" => ['nullable', 'string'],
-            "Signatarios.*.DadosAssinatura.DadosPessoaFisica.NumeroDocumentoPessoaFisica" => ['required', 'string'],
+            "Signatarios.*.DadosAssinatura.DadosPessoaFisica.NumeroDocumentoPessoaFisica" => ['nullable', 'string'],
             "Signatarios.*.DadosAssinatura.DadosPessoaJuridica.NomeEmpresa" => ['nullable', 'string'],
             "Signatarios.*.DadosAssinatura.DadosPessoaJuridica.TipoDocumentoEmpresa" => ['nullable', 'string'],
             "Signatarios.*.DadosAssinatura.DadosPessoaJuridica.NumeroDocumentoEmpresa" => ['nullable', 'string'],

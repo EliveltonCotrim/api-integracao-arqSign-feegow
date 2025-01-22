@@ -6,7 +6,7 @@ class DadosPessoaFisica
 {
     public ?string $nomePessoaFisica;
     public ?string $tipoDocumentoPessoaFisica;
-    public string $numeroDocumentoPessoaFisica;
+    public ?string $numeroDocumentoPessoaFisica;
 
     public function __construct(array $data)
     {

@@ -15,14 +15,15 @@ class WebhookNotification
     public ?string $nomeResponsavel;
     public ?string $status;
     public string $dataHoraAtual;
-    public ?string $dataCadastro;
-    public ?string $dataEnvio;
     public ?string $dataConclusao;
-    public ?string $dataReenvio;
-    public ?string $dataExpiracao;
-    public ?int $expiracaoDias;
     public array $signatarios;
     public array $documentos;
+    
+    // public ?string $dataCadastro;
+    // public ?string $dataEnvio;
+    // public ?string $dataReenvio;
+    // public ?string $dataExpiracao;
+    // public ?int $expiracaoDias;
 
     public function __construct(array $data)
     {
@@ -37,18 +38,18 @@ class WebhookNotification
         $this->nomeResponsavel = data_get($data, 'NomeResponsavel');
         $this->status = data_get($data, 'Status');
         $this->dataHoraAtual = data_get($data, 'DataHoraAtual');
-        $this->dataCadastro = data_get($data, 'DataCadastro');
-        $this->dataEnvio = data_get($data, 'DataEnvio');
         $this->dataConclusao = data_get($data, 'DataConclusao');
-        $this->dataReenvio = data_get($data, 'DataReenvio');
-        $this->dataExpiracao = data_get($data, 'DataExpiracao');
-        $this->expiracaoDias = data_get($data, 'ExpiracaoDias');
         $this->signatarios = array_map(
             fn($signatario) => new Signatario($signatario),
             data_get($data, 'Signatarios', [])
         );
         $this->documentos = array_map(fn($documento) => new Documento($documento), data_get($data, 'Documentos', []));
 
+        // $this->dataCadastro = data_get($data, 'DataCadastro');
+        // $this->dataEnvio = data_get($data, 'DataEnvio');
+        // $this->dataReenvio = data_get($data, 'DataReenvio');
+        // $this->dataExpiracao = data_get($data, 'DataExpiracao');
+        // $this->expiracaoDias = data_get($data, 'ExpiracaoDias');
         // $this->Signatarios = data_get($data, 'Signatarios', []);
         // $this->Documentos = data_get($data, 'Documentos', []);
     }

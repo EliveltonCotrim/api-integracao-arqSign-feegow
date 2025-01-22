@@ -18,9 +18,7 @@ class Patient extends BaseEndpoint
             ->get('/patient/search/')
             ->json();
 
-            // dd($jsonPatient);
-
-        return $jsonPatient['success'] ? $this->transform($jsonPatient['content'], PatientEntity::class) : null;
+        return isset($jsonPatient['success']) ? $this->transform($jsonPatient['content'], PatientEntity::class) : null;
     }
 
     /**
